@@ -10,7 +10,7 @@
 
 void annaData();
 //int annaData(int x[]);
-int muutaRadiaaneiksi(int x);
+float muutaRadiaaneiksi(float x);
 //int laskeGalaksit(int x);
 
 const int N = 16;
@@ -47,8 +47,8 @@ int main()
 	annaData();
 }
 
-int muutaRadiaaneiksi(int a) {
-	return (a * (1 / 60) * (PI / 180));
+float muutaRadiaaneiksi(float a) {
+	return (float)(a * (float)(1 / 60) * (float)(PI / 180));
 }
 void annaData() {
 	//TÄMÄ FILU PUUTTUU GITISTÄ
@@ -62,11 +62,14 @@ void annaData() {
 	int increment = 0;
 	//GETLINE -> ´radiaanita -> laita filuun
 	while (myfile >> temp1 >> temp2) {
-		for (int i = 0; N > i; i++) {
-		printf("%f ", temp1, " ", temp2);
 
+		printf("%f ", temp1, " ", temp2);
+		printf("%f ", muutaRadiaaneiksi(temp1), " ", muutaRadiaaneiksi(temp2));
 		radfile << muutaRadiaaneiksi(temp1) << muutaRadiaaneiksi(temp2);
-		return;
+
+		increment++;
+		if (increment > 10) {
+			return;
 		}
 	}
 	getchar();
