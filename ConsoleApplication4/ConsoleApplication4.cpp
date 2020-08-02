@@ -47,8 +47,12 @@ int main()
 	annaData();
 }
 
+//PALAUTTAA LIIAN PIENEN ARVON - Lasku 1 / 60 menee automaattisesti päin helvettiä 0.016... sijaan
 float muutaRadiaaneiksi(float a) {
-	return (a * (1 / 60) * (PI / 180));
+	//std::cout << a << "\n";
+	//std::cout << (float)1 / (float)60 << "\n";
+	//std::cout << a * (1 / 60) << " " << PI / 180;
+	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 void annaData() {
 	//TÄMÄ FILU PUUTTUU GITISTÄ
@@ -66,7 +70,7 @@ void annaData() {
 		//float c = std::stof(b);
 		//printf(c);
 
-		std::cout << temp1 << " " << temp2;
+		//std::cout << temp1 << " " << temp2;
 		printf("%f ", muutaRadiaaneiksi(temp1), " ", muutaRadiaaneiksi(temp2));
 		std::cout << typeid(temp1).name() << '\n';
 
