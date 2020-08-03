@@ -55,32 +55,36 @@ float muutaRadiaaneiksi(float a) {
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 void annaData() {
-	//TÄMÄ FILU PUUTTUU GITISTÄ
 	std::fstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
 	std::ofstream radfile("radianvalues.txt");
 	const int N = 100;
 	float a[N];
-	float temp1 = 0;
-	float temp2 = 0;
+
 	int increment = 0;
-	//GETLINE -> ´radiaanita -> laita filuun
-	while (myfile >> temp1 >> temp2) {
+	
+	std::string line;
+	while (std::getline(myfile, line)) {
+		std::istringstream iss(line);
+		float temp1;
+		float temp2;
+		if (!(myfile >> temp1 >> temp2)) { break; }
 		//std::string b((char*)temp1);
 		//float c = std::stof(b);
 		//printf(c);
 
-		//std::cout << temp1 << " " << temp2;
-		printf("%f ", muutaRadiaaneiksi(temp1), " ", muutaRadiaaneiksi(temp2));
-		std::cout << typeid(temp1).name() << '\n';
+		//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
+		//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
+		//std::cout << typeid(temp1).name() << '\n';
 
-		radfile << muutaRadiaaneiksi(temp1) << muutaRadiaaneiksi(temp2);
+		radfile << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
 
 		increment++;
-		if (increment > 10) {
-			return;
-		}
+		//if (increment > 1000002) {
+		//	return;
+		//}
 	}
+	std::cout << "Data transfer completed, Increment: " << increment;
 	getchar();
 	return;
 

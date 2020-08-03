@@ -1,9 +1,7 @@
 ﻿  ConsoleApplication4.cpp
 c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(18): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(74): warning C4474: 'printf' : too many arguments passed for format string
-  c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(74): note: placeholders and their parameters expect 1 variadic arguments, but 3 were provided
-c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(63): warning C4101: 'a': unreferenced local variable
-c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(110): warning C4101: 'ad': unreferenced local variable
-c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(111): warning C4101: 'bd': unreferenced local variable
+c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(62): warning C4101: 'a': unreferenced local variable
+c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(114): warning C4101: 'ad': unreferenced local variable
+c:\users\illusive\source\repos\consoleapplication4\consoleapplication4\consoleapplication4.cpp(115): warning C4101: 'bd': unreferenced local variable
   ConsoleApplication4.vcxproj -> C:\Users\illusive\source\repos\ConsoleApplication4\Debug\ConsoleApplication4.exe
