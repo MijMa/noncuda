@@ -58,34 +58,28 @@ void annaData() {
 	std::fstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
 	std::ofstream radfile("radianvalues.txt");
-	const int N = 100;
-	float a[N];
-
+	const int N = 100000;
+	//Two dimensional matrix for array values, depth = 2 (0 and 1) since the third value is  constant 1;
+	float radArray[1][N];
 	int increment = 0;
 	
 	std::string line;
-	while (std::getline(myfile, line)) {
+	while (std::getline(myfile, line) && increment < 100000) {
 		std::istringstream iss(line);
 		float temp1;
 		float temp2;
+		//Skip a line in the file if there's only one value in the line
 		if (!(myfile >> temp1 >> temp2)) { break; }
-		//std::string b((char*)temp1);
-		//float c = std::stof(b);
-		//printf(c);
 
 		//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
 		//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
 		//std::cout << typeid(temp1).name() << '\n';
 
-		radfile << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-
-		increment++;
-		//if (increment > 1000002) {
-		//	return;
-		//}
+		//radfile << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
+		radArray[N][0] = temp1;
+		radArray[N][1] = temp2;
 	}
-	std::cout << "Data transfer completed, Increment: " << increment;
-	getchar();
+	std::cout << "Data transfer completed" << increment << radArray;
 	return;
 
 	/*
