@@ -55,31 +55,37 @@ float muutaRadiaaneiksi(float a) {
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 void annaData() {
-	std::fstream myfile("data_100k_arcmin.txt", std::ios_base::in);
+	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
-	std::ofstream radfile("radianvalues.txt");
-	const int N = 100000;
+	//std::ofstream radfile("radianvalues.txt");
+	const int size = 100000;
 	//Two dimensional matrix for array values, depth = 2 (0 and 1) since the third value is  constant 1;
-	float radArray[1][N];
+	float radArray[1][size];
 	int increment = 0;
 	
 	std::string line;
 	while (std::getline(myfile, line) && increment < 100000) {
 		std::istringstream iss(line);
-		float temp1;
-		float temp2;
+		float temp1, temp2;
 		//Skip a line in the file if there's only one value in the line
-		if (!(myfile >> temp1 >> temp2)) { break; }
+		if (!(iss >> temp1 >> temp2)) { continue; }
 
 		//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
 		//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
 		//std::cout << typeid(temp1).name() << '\n';
 
 		//radfile << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-		radArray[N][0] = temp1;
-		radArray[N][1] = temp2;
+		radArray[0][increment] = muutaRadiaaneiksi(temp1);
+		radArray[1][increment] = muutaRadiaaneiksi(temp2); // <---THIS ONE IS THE PROBLEM!?
+		//std::cout << radArray[0][increment] << " " << radArray[1][increment] << "\n";
+		/*if (increment > 10) {
+			continue;
+			std::cout << "onnistui?";
+		}*/
+		increment++;
 	}
-	std::cout << "Data transfer completed" << increment << radArray;
+	myfile.close();
+	std::cout << "Data transfer completed " << increment;
 	return;
 
 	/*
