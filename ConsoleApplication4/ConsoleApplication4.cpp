@@ -7,16 +7,16 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 void annaData();
 //int annaData(int x[]);
-float muutaRadiaaneiksi(char* a);
+float muutaRadiaaneiksi(float a);
 //int laskeGalaksit(int x);
 
 const int N = 16;
 const int blocksize = 16;
 const float PI = atan(1) * 4;
-
 
 int main()
 {
@@ -54,13 +54,19 @@ float muutaRadiaaneiksi(float a) {
 	//std::cout << a * (1 / 60) << " " << PI / 180;
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
+
 void annaData() {
 	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
 	//std::ofstream radfile("radianvalues.txt");
 	const int size = 100000;
-	//Two dimensional matrix for array values, depth = 2 (0 and 1) since the third value is  constant 1;
-	float radArray[1][size];
+	//Two dimensional matrix for array values, have to use 2 variables as hardware limits array size;
+	//int* radArray = new int[size];
+	//float radArray[1][size];
+	//float radArrayL2[size];
+	//float radArrayL1[size];
+	std::vector<float> valueVec(100000);
+	std::vector<std::vector<float> > radVec(2, valueVec);
 	int increment = 0;
 	
 	std::string line;
@@ -70,21 +76,25 @@ void annaData() {
 		//Skip a line in the file if there's only one value in the line
 		if (!(iss >> temp1 >> temp2)) { continue; }
 
-		//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
-		//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-		//std::cout << typeid(temp1).name() << '\n';
+		//radArrayL1[increment] = muutaRadiaaneiksi(temp1);
+		//radArrayL2[increment] = muutaRadiaaneiksi(temp2);
+		radVec[0][increment] = muutaRadiaaneiksi(temp1);
+		radVec[1][increment] = muutaRadiaaneiksi(temp2); // <---THIS ONE IS THE PROBLEM!?
 
-		//radfile << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-		radArray[0][increment] = muutaRadiaaneiksi(temp1);
-		radArray[1][increment] = muutaRadiaaneiksi(temp2); // <---THIS ONE IS THE PROBLEM!?
-		//std::cout << radArray[0][increment] << " " << radArray[1][increment] << "\n";
-		/*if (increment > 10) {
-			continue;
-			std::cout << "onnistui?";
-		}*/
+		if (increment == 6) {
+			//std::cout << radArrayL2[0];
+			//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
+			//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
+			//std::cout << typeid(temp1).name() << '\n';
+
+			std::cout << radVec[0][0];
+			std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
+			std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
+			std::cout << typeid(temp1).name() << '\n';
+		}
+
 		increment++;
 	}
-	myfile.close();
 	std::cout << "Data transfer completed " << increment;
 	return;
 
