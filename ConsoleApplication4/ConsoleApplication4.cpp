@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-void annaData();
+std::vector<std::vector<float> > annaData();
 //int annaData(int x[]);
 float muutaRadiaaneiksi(float a);
 //int laskeGalaksit(int x);
@@ -44,7 +44,9 @@ int main()
 	}
 	*/
 	//Yritet‰‰n nyt aluksi tehd‰ radiaanifilu
-	annaData();
+	std::vector<std::vector<float> > dataVektori = annaData();
+	dataVektori = annaData();
+	std::cout << dataVektori.size() << " [1][1] = " << dataVektori[1][1];
 }
 
 //PALAUTTAA LIIAN PIENEN ARVON - Lasku 1 / 60 menee automaattisesti p‰in helvetti‰ 0.016... sijaan
@@ -55,22 +57,17 @@ float muutaRadiaaneiksi(float a) {
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 
-void annaData() {
+std::vector<std::vector<float> > annaData() {
 	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
-	//std::ofstream radfile("radianvalues.txt");
-	const int size = 100000;
-	//Two dimensional matrix for array values, have to use 2 variables as hardware limits array size;
-	//int* radArray = new int[size];
-	//float radArray[1][size];
-	//float radArrayL2[size];
-	//float radArrayL1[size];
-	std::vector<float> valueVec(100000);
-	std::vector<std::vector<float> > radVec(2, valueVec);
+	const int size = 1000;
 	int increment = 0;
-	
+	//Two dimensional matrix for array values
+	std::vector<float> valueVec(1000);
+	std::vector<std::vector<float> > radVec(2, valueVec);
 	std::string line;
-	while (std::getline(myfile, line) && increment < 100000) {
+
+	while (std::getline(myfile, line) && increment < 1000) {
 		std::istringstream iss(line);
 		float temp1, temp2;
 		//Skip a line in the file if there's only one value in the line
@@ -96,7 +93,7 @@ void annaData() {
 		increment++;
 	}
 	std::cout << "Data transfer completed " << increment;
-	return;
+	return radVec;
 
 	/*
 	int skipped = 1233;
