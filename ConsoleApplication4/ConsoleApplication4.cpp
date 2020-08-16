@@ -21,40 +21,29 @@ const float PI = atan(1) * 4;
 int main()
 {
 	/*
-	TODO: Parsi arvot tekstifilusta listoihin Real ja Imaginary - milloin lukea arvot? Laskemisen yhteydess‰? Mihin tallentaa
-		Laske kaikille n‰ille arvoille vektoriarvot (GPU:lla)
-			Tee histogrammi, vertaile, vertaile laskemalla.
-	#include <fstream>
-	int main(int argc, char * argv[])
-	{
-		std::fstream myfile("D:\\data.txt", std::ios_base::in);
-		float a;
-		while (myfile >> a)
-		{
-		printf("%f ", a);
-		}
-		getchar();
-		return 0;
-	int skipped = 1233;
-	for (int i = 0; i < skipped; i++){
-		float tmp;
-		myfile >> tmp;
-	}
-		myfile >> value;
-	}
+	1. -> Arvot arteesiseen koordinaattij‰rjestelm‰‰n
+	2. -> Laske kulmat jokaiselle parille
+	3. -> Tee histogremmi arvoista
+	4. -> CPU:lla laske tilastoarvo
 	*/
 	//Yritet‰‰n nyt aluksi tehd‰ radiaanifilu
 	std::vector<std::vector<float> > dataVektori = annaData();
-	dataVektori = annaData();
-	std::cout << dataVektori.size() << " [1][1] = " << dataVektori[1][1];
+	std::cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
 }
 
-//PALAUTTAA LIIAN PIENEN ARVON - Lasku 1 / 60 menee automaattisesti p‰in helvetti‰ 0.016... sijaan
 float muutaRadiaaneiksi(float a) {
 	//std::cout << a << "\n";
-	//std::cout << (float)1 / (float)60 << "\n";
 	//std::cout << a * (1 / 60) << " " << PI / 180;
 	return a * ((float)1 / (float)60) * (PI / (float)180);
+}
+
+float muutaKarteesiseksi(float a, float b) {
+	// a = theta(pistinveitsi alaspain), b = omega
+	std::vector<float> karteesiVec;
+	float x = sin(b) * cos(a);
+	float y = sin(b) * sin(a);
+	float z = cos(b);
+	return karteesiVec (x, y, z);
 }
 
 std::vector<std::vector<float> > annaData() {
@@ -70,45 +59,18 @@ std::vector<std::vector<float> > annaData() {
 	while (std::getline(myfile, line) && increment < 1000) {
 		std::istringstream iss(line);
 		float temp1, temp2;
+
 		//Skip a line in the file if there's only one value in the line
 		if (!(iss >> temp1 >> temp2)) { continue; }
 
-		//radArrayL1[increment] = muutaRadiaaneiksi(temp1);
-		//radArrayL2[increment] = muutaRadiaaneiksi(temp2);
+		//right ascension in radians turned into spherical coordinates
 		radVec[0][increment] = muutaRadiaaneiksi(temp1);
-		radVec[1][increment] = muutaRadiaaneiksi(temp2); // <---THIS ONE IS THE PROBLEM!?
-
-		if (increment == 6) {
-			//std::cout << radArrayL2[0];
-			//std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
-			//std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-			//std::cout << typeid(temp1).name() << '\n';
-
-			std::cout << radVec[0][0];
-			std::cout << "starting values:   " << temp1 << " " << temp2 << "\n";
-			std::cout << "Arvot radiaaneina: " << muutaRadiaaneiksi(temp1) << " " << muutaRadiaaneiksi(temp2) << "\n";
-			std::cout << typeid(temp1).name() << '\n';
-		}
-
+		//declination in radians = 90 - declination for the angle in spherical
+		radVec[1][increment] = 90 - muutaRadiaaneiksi(temp2);
 		increment++;
 	}
 	std::cout << "Data transfer completed " << increment;
 	return radVec;
-
-	/*
-	int skipped = 1233;
-	for (int i = 0; i < skipped; i++) {
-		float tmp;
-		myfile >> tmp;
-	}
-	if (myfile.is_open()) {
-		myfile << "This is a line.\n";
-		myfile << "This is another line.\n";
-		myfile.close();
-	}
-	else cout << "Unable to open file";
-	return 'a';
-	*/
 }
 
 //apufunktio kulmien ja vektorien laskemiseen, kutsuu GPU:n laskufunktiota
