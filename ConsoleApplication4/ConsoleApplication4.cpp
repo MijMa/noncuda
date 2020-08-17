@@ -48,6 +48,13 @@ std::vector<float> muutaKarteesiseksi(float a, float b) {
 	return karteesiVec;
 }
 
+void printToFile(std::vector<float> a) {
+	std::ofstream outFile("valuecheckfile.txt");
+	for (const auto &e : a) {
+		outFile << e << "\n";
+	}
+}
+
 std::vector<std::vector<float> > annaData() {
 	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
@@ -66,16 +73,15 @@ std::vector<std::vector<float> > annaData() {
 		if (!(iss >> temp1 >> temp2)) { continue; }
 
 		//right ascension in radians turned into spherical coordinates
-		radVec[0][increment]
 		temp1 = muutaRadiaaneiksi(temp1);
 		//declination in radians = 90 - declination for the angle in spherical
-		radVec[1][increment]
 		temp2 = 90 - muutaRadiaaneiksi(temp2);
 		//than turned into carthesian coordinates
-		
+		radVec[1][increment] = muutaKarteesiseksi(temp1, temp2);
 
 		increment++;
 	}
+	printToFile(radVec[0]);
 	std::cout << "Data transfer completed " << increment;
 	return radVec;
 }
