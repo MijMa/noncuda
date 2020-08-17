@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+std::vector<float> muutaKarteesiseksi();
 std::vector<std::vector<float> > annaData();
 //int annaData(int x[]);
 float muutaRadiaaneiksi(float a);
@@ -37,13 +38,14 @@ float muutaRadiaaneiksi(float a) {
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 
-float muutaKarteesiseksi(float a, float b) {
+//This function turns spherical coordinate values into carthesian ones
+std::vector<float> muutaKarteesiseksi(float a, float b) {
 	// a = theta(pistinveitsi alaspain), b = omega
-	std::vector<float> karteesiVec;
 	float x = sin(b) * cos(a);
 	float y = sin(b) * sin(a);
 	float z = cos(b);
-	return karteesiVec (x, y, z);
+	std::vector<float> karteesiVec = {x, y, z};
+	return karteesiVec;
 }
 
 std::vector<std::vector<float> > annaData() {
@@ -64,9 +66,14 @@ std::vector<std::vector<float> > annaData() {
 		if (!(iss >> temp1 >> temp2)) { continue; }
 
 		//right ascension in radians turned into spherical coordinates
-		radVec[0][increment] = muutaRadiaaneiksi(temp1);
+		radVec[0][increment]
+		temp1 = muutaRadiaaneiksi(temp1);
 		//declination in radians = 90 - declination for the angle in spherical
-		radVec[1][increment] = 90 - muutaRadiaaneiksi(temp2);
+		radVec[1][increment]
+		temp2 = 90 - muutaRadiaaneiksi(temp2);
+		//than turned into carthesian coordinates
+		
+
 		increment++;
 	}
 	std::cout << "Data transfer completed " << increment;
