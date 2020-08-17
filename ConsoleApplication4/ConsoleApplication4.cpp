@@ -62,7 +62,7 @@ std::vector<std::vector<float> > annaData() {
 	int increment = 0;
 	//Two dimensional matrix for array values
 	std::vector<float> valueVec(1000);
-	std::vector<std::vector<float> > radVec(2, valueVec);
+	std::vector<std::vector<float> > radVec(1000, valueVec);
 	std::string line;
 
 	while (std::getline(myfile, line) && increment < 1000) {
@@ -77,11 +77,10 @@ std::vector<std::vector<float> > annaData() {
 		//declination in radians = 90 - declination for the angle in spherical
 		temp2 = 90 - muutaRadiaaneiksi(temp2);
 		//than turned into carthesian coordinates
-		radVec[1][increment] = muutaKarteesiseksi(temp1, temp2);
-
+		radVec[increment] = muutaKarteesiseksi(temp1, temp2);
+		printToFile(radVec[increment]); //  <-- NEGATIIVISIA ARVOJA, somethings real off mate
 		increment++;
 	}
-	printToFile(radVec[0]);
 	std::cout << "Data transfer completed " << increment;
 	return radVec;
 }
