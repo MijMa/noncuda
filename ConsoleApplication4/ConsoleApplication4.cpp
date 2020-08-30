@@ -48,10 +48,12 @@ std::vector<float> muutaKarteesiseksi(float a, float b) {
 	return karteesiVec;
 }
 
-void printToFile(std::vector<float> a) {
+void printToFile(std::vector<std::vector<float> > a) {
 	std::ofstream outFile("valuecheckfile.txt");
-	for (const auto &e : a) {
-		outFile << e << "\n";
+	for (const auto &b : a) {
+		for (const auto &c : b) {
+			outFile << c << "\n";
+		}
 	}
 }
 
@@ -78,9 +80,9 @@ std::vector<std::vector<float> > annaData() {
 		temp2 = 90 - muutaRadiaaneiksi(temp2);
 		//than turned into carthesian coordinates
 		radVec[increment] = muutaKarteesiseksi(temp1, temp2);
-		printToFile(radVec[increment]); //  <-- NEGATIIVISIA ARVOJA, somethings real off mate
 		increment++;
 	}
+	printToFile(radVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
 	std::cout << "Data transfer completed " << increment;
 	return radVec;
 }
