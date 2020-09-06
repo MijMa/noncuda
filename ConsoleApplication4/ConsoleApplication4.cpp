@@ -24,37 +24,12 @@ int main()
 	/*
 	1. -> Arvot arteesiseen koordinaattij‰rjestelm‰‰n
 	2. -> Laske kulmat jokaiselle parille
-	3. -> Tee histogremmi arvoista
+	3. -> Tee histogrammi arvoista
 	4. -> CPU:lla laske tilastoarvo
 	*/
 	//Yritet‰‰n nyt aluksi tehd‰ radiaanifilu
 	std::vector<std::vector<float> > dataVektori = annaData();
 	std::cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
-}
-
-float muutaRadiaaneiksi(float a) {
-	//std::cout << a << "\n";
-	//std::cout << a * (1 / 60) << " " << PI / 180;
-	return a * ((float)1 / (float)60) * (PI / (float)180);
-}
-
-//This function turns spherical coordinate values into carthesian ones
-std::vector<float> muutaKarteesiseksi(float a, float b) {
-	// a = theta(pistinveitsi alaspain), b = omega
-	float x = sin(b) * cos(a);
-	float y = sin(b) * sin(a);
-	float z = cos(b);
-	std::vector<float> karteesiVec = {x, y, z};
-	return karteesiVec;
-}
-
-void printToFile(std::vector<std::vector<float> > a) {
-	std::ofstream outFile("valuecheckfile.txt");
-	for (const auto &b : a) {
-		for (const auto &c : b) {
-			outFile << c << "\n";
-		}
-	}
 }
 
 std::vector<std::vector<float> > annaData() {
@@ -85,6 +60,48 @@ std::vector<std::vector<float> > annaData() {
 	printToFile(radVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
 	std::cout << "Data transfer completed " << increment;
 	return radVec;
+}
+
+int laitaHistoGrammiin(std::vector<float> arvot) {
+	int sailiot = 720;
+	std::vector<int> histogrammi[720];
+	
+	for (i : arvot) {
+		i++;
+	}
+	
+	return 0;
+}
+
+//funktio kahden pisteen v‰lisen kulman laskemiselle karteesisessa koordinaattij‰rjestelm‰ss‰.
+float laskePistValKulma(std::vector<float> a, std::vector<float> b) {
+	float x = acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
+	return x;
+}
+
+float muutaRadiaaneiksi(float a) {
+	//std::cout << a << "\n";
+	//std::cout << a * (1 / 60) << " " << PI / 180;
+	return a * ((float)1 / (float)60) * (PI / (float)180);
+}
+
+//This function turns spherical coordinate values into carthesian ones
+std::vector<float> muutaKarteesiseksi(float a, float b) {
+	// a = theta(pistinveitsi alaspain), b = omega
+	float x = sin(b) * cos(a);
+	float y = sin(b) * sin(a);
+	float z = cos(b);
+	std::vector<float> karteesiVec = {x, y, z};
+	return karteesiVec;
+}
+
+void printToFile(std::vector<std::vector<float> > a) {
+	std::ofstream outFile("valuecheckfile.txt");
+	for (const auto &b : a) {
+		for (const auto &c : b) {
+			outFile << c << "\n";
+		}
+	}
 }
 
 //apufunktio kulmien ja vektorien laskemiseen, kutsuu GPU:n laskufunktiota
