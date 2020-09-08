@@ -11,6 +11,7 @@
 
 
 std::vector<std::vector<float> > annaData();
+std::vector<float> laskeKulmat(std::vector<std::vector <float >> a);
 int laitaHistoGrammiin();
 float laskePistValKulma();
 std::vector<float> muutaKarteesiseksi(float a, float b);
@@ -36,6 +37,8 @@ int main()
 	std::cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
 }
 
+//Apufunktio alkuperaisten arvojen lukemiseen tiedostosta ja preprosessointi karteesisiksi arvoiksi.
+//Palauttaa vektorin jossa on alivektoreissa karteesiset arvot (x, y, z).
 std::vector<std::vector<float> > annaData() {
 	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
 
@@ -70,6 +73,13 @@ std::vector<std::vector<float> > annaData() {
 //Apufunktio joka laskee GPU:lla argumenttivektorinsa kaikkien pisteiden väliset kulmat
 //Palauttaa vektorin joka on täynnä kulma-arvoja
 std::vector<float> laskeKulmat (std::vector<std::vector <float >> karteesiArvot) {
+
+	for (std::vector<float> &a : karteesiArvot) {
+		for (auto &b : a) { //<--- TÄSTÄ KLASSINEN
+			laskePistValKulma(a, b);
+		}
+	}
+
 	return {0.60, 0.90};
 }
 
@@ -117,8 +127,13 @@ std::vector<float> muutaKarteesiseksi(float a, float b) {
 void printToFile(std::vector<std::vector<float> > a) {
 	std::ofstream outFile("valuecheckfile.txt");
 	for (const auto &b : a) {
+		int i = 0;
 		for (const auto &c : b) {
-			outFile << c << "\n";
+			outFile << c << " ";
+			i++;
+			if (i == 3){
+				outFile << "\n";
+			}
 		}
 	}
 }
