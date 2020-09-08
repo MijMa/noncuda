@@ -9,10 +9,13 @@
 #include <string>
 #include <vector>
 
-std::vector<float> muutaKarteesiseksi();
+
 std::vector<std::vector<float> > annaData();
-//int annaData(int x[]);
+int laitaHistoGrammiin();
+float laskePistValKulma();
+std::vector<float> muutaKarteesiseksi(float a, float b);
 float muutaRadiaaneiksi(float a);
+void printToFile(std::vector<std::vector<float> > a);
 //int laskeGalaksit(int x);
 
 const int N = 16;
@@ -27,8 +30,9 @@ int main()
 	3. -> Tee histogrammi arvoista
 	4. -> CPU:lla laske tilastoarvo
 	*/
-	//Yritetään nyt aluksi tehdä radiaanifilu
+
 	std::vector<std::vector<float> > dataVektori = annaData();
+	laskeKulmat(dataVektori);
 	std::cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
 }
 
@@ -39,7 +43,7 @@ std::vector<std::vector<float> > annaData() {
 	int increment = 0;
 	//Two dimensional matrix for array values
 	std::vector<float> valueVec(1000);
-	std::vector<std::vector<float> > radVec(1000, valueVec);
+	std::vector<std::vector<float> > mainVec(1000, valueVec);
 	std::string line;
 
 	while (std::getline(myfile, line) && increment < 1000) {
@@ -54,22 +58,36 @@ std::vector<std::vector<float> > annaData() {
 		//declination in radians = 90 - declination for the angle in spherical
 		temp2 = 90 - muutaRadiaaneiksi(temp2);
 		//than turned into carthesian coordinates
-		radVec[increment] = muutaKarteesiseksi(temp1, temp2);
+		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
 		increment++;
 	}
-	printToFile(radVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
+	printToFile(mainVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
 	std::cout << "Data transfer completed " << increment;
-	return radVec;
+	std::cout << " size of vector: " << mainVec.size() << " and the first value: " << mainVec[0].size();
+	return mainVec;
 }
 
-int laitaHistoGrammiin(std::vector<float> arvot) {
+//Apufunktio joka laskee GPU:lla argumenttivektorinsa kaikkien pisteiden väliset kulmat
+//Palauttaa vektorin joka on täynnä kulma-arvoja
+std::vector<float> laskeKulmat (std::vector<std::vector <float >> karteesiArvot) {
+	return {0.60, 0.90};
+}
+
+//Saa satoja tuhansia kulma-arvoja? -joo vektoriin vaan ja sit tälle kutsulle
+//TÄÄ GPU:LLA
+int laitaHistoGrammiin(std::vector<std::vector<float> > arvot) {
 	int sailiot = 720;
+	// 1 sailio = 0.25 astetta. 180 asteen haitari
 	std::vector<int> histogrammi[720];
 	
-	for (i : arvot) {
-		i++;
+	//jokainen vektorin arvo pitäisi kertoa jokaisella toisella vektorin arvolla
+	/*
+	for (int i : arvot) {
+		for (int z : arvot) {
+		laskePistValKulma(i, z);
+		}
 	}
-	
+	*/
 	return 0;
 }
 
@@ -86,6 +104,7 @@ float muutaRadiaaneiksi(float a) {
 }
 
 //This function turns spherical coordinate values into carthesian ones
+//Returns a vector with three values; x, y, z
 std::vector<float> muutaKarteesiseksi(float a, float b) {
 	// a = theta(pistinveitsi alaspain), b = omega
 	float x = sin(b) * cos(a);
