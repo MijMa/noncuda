@@ -8,15 +8,15 @@
 #include <sstream>
 #include <string>
 #include <vector>
+using namespace std;
 
-
-std::vector<std::vector<float> > annaData();
-std::vector<float> laskeKulmat(std::vector<std::vector <float >> a);
+vector<vector<float> > annaData();
+vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
 int laitaHistoGrammiin();
-float laskePistValKulma();
-std::vector<float> muutaKarteesiseksi(float a, float b);
+float laskePistValKulma(vector<float> a, vector<float> b);
+vector<float> muutaKarteesiseksi(float a, float b);
 float muutaRadiaaneiksi(float a);
-void printToFile(std::vector<std::vector<float> > a);
+void printToFile(vector<vector<float> > a);
 //int laskeGalaksit(int x);
 
 const int N = 16;
@@ -32,25 +32,25 @@ int main()
 	4. -> CPU:lla laske tilastoarvo
 	*/
 
-	std::vector<std::vector<float> > dataVektori = annaData();
-	laskeKulmat(dataVektori);
-	std::cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
+	vector<vector<float> > dataVektori = annaData();
+	printToFile(laskeKulmat(dataVektori, dataVektori));
+	cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
 }
 
 //Apufunktio alkuperaisten arvojen lukemiseen tiedostosta ja preprosessointi karteesisiksi arvoiksi.
 //Palauttaa vektorin jossa on alivektoreissa karteesiset arvot (x, y, z).
-std::vector<std::vector<float> > annaData() {
-	std::ifstream myfile("data_100k_arcmin.txt", std::ios_base::in);
+vector<vector<float> > annaData() {
+	ifstream myfile("data_100k_arcmin.txt", ios_base::in);
 
 	const int size = 1000;
 	int increment = 0;
 	//Two dimensional matrix for array values
-	std::vector<float> valueVec(1000);
-	std::vector<std::vector<float> > mainVec(1000, valueVec);
-	std::string line;
+	vector<float> valueVec(1000);
+	vector<vector<float> > mainVec(1000, valueVec);
+	string line;
 
-	while (std::getline(myfile, line) && increment < 1000) {
-		std::istringstream iss(line);
+	while (getline(myfile, line) && increment < 1000) {
+		istringstream iss(line);
 		float temp1, temp2;
 
 		//Skip a line in the file if there's only one value in the line
@@ -64,31 +64,36 @@ std::vector<std::vector<float> > annaData() {
 		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
 		increment++;
 	}
-	printToFile(mainVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
-	std::cout << "Data transfer completed " << increment;
-	std::cout << " size of vector: " << mainVec.size() << " and the first value: " << mainVec[0].size();
+	//printToFile(mainVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
+	cout << "Data transfer completed " << increment;
+	cout << " size of vector: " << mainVec.size() << " and the first value: " << mainVec[0].size();
 	return mainVec;
 }
 
-//Apufunktio joka laskee GPU:lla argumenttivektorinsa kaikkien pisteiden väliset kulmat
+//Apufunktio joka laskee GPU:lla argumenttivektoriensa kaikkien pisteiden väliset kulmat
+//Ottaa kaksi vektoria arvoja karteesisessa koordinaattijärjestelmässä
 //Palauttaa vektorin joka on täynnä kulma-arvoja
-std::vector<float> laskeKulmat (std::vector<std::vector <float >> karteesiArvot) {
+vector<vector <float >> laskeKulmat (vector<vector <float >> karteesiArvot1, vector<vector <float >> karteesiArvot2) {
 
-	for (std::vector<float> &a : karteesiArvot) {
-		for (auto &b : a) { //<--- TÄSTÄ KLASSINEN
-			laskePistValKulma(a, b);
+	vector<vector <float >> kulmaVektori(karteesiArvot1.size());
+
+	for (vector<float> &a : karteesiArvot1) {
+		for (int i = 0; karteesiArvot1.size() > i; i++) { //<--- TÄSTÄ KLASSINEN
+			//A ON NYT SIIS PERUS KOLMEN VEKTORI, verrataan A:ta jokaiseen muuhun vektoriin(paitsi a:han) a X 100000
+			kulmaVektori[i].push_back(laskePistValKulma(a, karteesiArvot2[i]));
 		}
 	}
-
-	return {0.60, 0.90};
+	cout << "\n Kulmavektorin ekan alkion koko: " << kulmaVektori[1].size();
+	cout << "\n Kulmavektorin koko: " << kulmaVektori.size();
+	return kulmaVektori;
 }
 
 //Saa satoja tuhansia kulma-arvoja? -joo vektoriin vaan ja sit tälle kutsulle
 //TÄÄ GPU:LLA
-int laitaHistoGrammiin(std::vector<std::vector<float> > arvot) {
+int laitaHistoGrammiin(vector<vector<float> > arvot) {
 	int sailiot = 720;
 	// 1 sailio = 0.25 astetta. 180 asteen haitari
-	std::vector<int> histogrammi[720];
+	vector<int> histogrammi[720];
 	
 	//jokainen vektorin arvo pitäisi kertoa jokaisella toisella vektorin arvolla
 	/*
@@ -102,30 +107,30 @@ int laitaHistoGrammiin(std::vector<std::vector<float> > arvot) {
 }
 
 //funktio kahden pisteen välisen kulman laskemiselle karteesisessa koordinaattijärjestelmässä.
-float laskePistValKulma(std::vector<float> a, std::vector<float> b) {
+float laskePistValKulma(vector<float> a, vector<float> b) {
 	float x = acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
 	return x;
 }
 
 float muutaRadiaaneiksi(float a) {
-	//std::cout << a << "\n";
-	//std::cout << a * (1 / 60) << " " << PI / 180;
+	//cout << a << "\n";
+	//cout << a * (1 / 60) << " " << PI / 180;
 	return a * ((float)1 / (float)60) * (PI / (float)180);
 }
 
 //This function turns spherical coordinate values into carthesian ones
 //Returns a vector with three values; x, y, z
-std::vector<float> muutaKarteesiseksi(float a, float b) {
+vector<float> muutaKarteesiseksi(float a, float b) {
 	// a = theta(pistinveitsi alaspain), b = omega
 	float x = sin(b) * cos(a);
 	float y = sin(b) * sin(a);
 	float z = cos(b);
-	std::vector<float> karteesiVec = {x, y, z};
+	vector<float> karteesiVec = {x, y, z};
 	return karteesiVec;
 }
 
-void printToFile(std::vector<std::vector<float> > a) {
-	std::ofstream outFile("valuecheckfile.txt");
+void printToFile(vector<vector<float> > a) {
+	ofstream outFile("valuecheckfile.txt");
 	for (const auto &b : a) {
 		int i = 0;
 		for (const auto &c : b) {
