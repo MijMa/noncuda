@@ -1,7 +1,1 @@
-﻿  ConsoleApplication4.cpp
-C:\Users\Illusive\source\repos\noncuda\ConsoleApplication4\ConsoleApplication4.cpp(24,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Illusive\source\repos\noncuda\ConsoleApplication4\ConsoleApplication4.cpp(24,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-C:\Users\Illusive\source\repos\noncuda\ConsoleApplication4\ConsoleApplication4.cpp(81,41): warning C4018: '>': signed/unsigned mismatch
-C:\Users\Illusive\source\repos\noncuda\ConsoleApplication4\ConsoleApplication4.cpp(153,8): warning C4101: 'ad': unreferenced local variable
-C:\Users\Illusive\source\repos\noncuda\ConsoleApplication4\ConsoleApplication4.cpp(154,7): warning C4101: 'bd': unreferenced local variable
-  ConsoleApplication4.vcxproj -> C:\Users\Illusive\source\repos\noncuda\Debug\ConsoleApplication4.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.Cpp.Platform.targets(67,5): error MSB8020: The build tools for v142 (Platform Toolset = 'v142') cannot be found. To build using the v142 build tools, please install v142 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Retarget solution".

@@ -14,8 +14,9 @@ vector<vector<float> > annaData();
 vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
 int laitaHistoGrammiin();
 float laskePistValKulma(vector<float> a, vector<float> b);
-vector<float> muutaKarteesiseksi(float a, float b);
 float muutaRadiaaneiksi(float a);
+float muutaAsteiksi(float a);
+vector<float> muutaKarteesiseksi(float a, float b);
 void printToFile(vector<vector<float> > a);
 //int laskeGalaksit(int x);
 
@@ -56,10 +57,10 @@ vector<vector<float> > annaData() {
 		//Skip a line in the file if there's only one value in the line
 		if (!(iss >> temp1 >> temp2)) { continue; }
 
-		//right ascension in radians turned into spherical coordinates
-		temp1 = muutaRadiaaneiksi(temp1);
-		//declination in radians = 90 - declination for the angle in spherical
-		temp2 = 90 - muutaRadiaaneiksi(temp2);
+		//right ascension in degrees turned into spherical coordinates
+		temp1 = muutaAsteiksi(temp1);
+		//declination in degrees = 90 - declination for the angle in spherical
+		temp2 = 90 - muutaAsteiksi(temp2);
 		//than turned into carthesian coordinates
 		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
 		increment++;
@@ -78,7 +79,7 @@ vector<vector <float >> laskeKulmat (vector<vector <float >> karteesiArvot1, vec
 	vector<vector <float >> kulmaVektori(karteesiArvot1.size());
 
 	for (vector<float> &a : karteesiArvot1) {
-		for (int i = 0; karteesiArvot1.size() > i; i++) { //<--- TÄSTÄ KLASSINEN
+		for (int i = 0; karteesiArvot1.size() > i; i++) {
 			//A ON NYT SIIS PERUS KOLMEN VEKTORI, verrataan A:ta jokaiseen muuhun vektoriin(paitsi a:han) a X 100000
 			kulmaVektori[i].push_back(laskePistValKulma(a, karteesiArvot2[i]));
 		}
@@ -116,6 +117,10 @@ float muutaRadiaaneiksi(float a) {
 	//cout << a << "\n";
 	//cout << a * (1 / 60) << " " << PI / 180;
 	return a * ((float)1 / (float)60) * (PI / (float)180);
+}
+
+float muutaAsteiksi(float a) {
+	return(a / 60);
 }
 
 //This function turns spherical coordinate values into carthesian ones
