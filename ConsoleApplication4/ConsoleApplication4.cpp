@@ -56,13 +56,22 @@ vector<vector<float> > annaData() {
 
 		//Skip a line in the file if there's only one value in the line
 		if (!(iss >> temp1 >> temp2)) { continue; }
-
+		if (increment == 1) {
+			cout << "ekat temp arvot: " << temp1 << " " << temp2;
+		}
 		//right ascension in degrees turned into spherical coordinates
-		temp1 = muutaAsteiksi(temp1);
+		temp1 = muutaRadiaaneiksi(muutaAsteiksi(temp1));
 		//declination in degrees = 90 - declination for the angle in spherical
-		temp2 = 90 - muutaAsteiksi(temp2);
+		temp2 = muutaRadiaaneiksi(90 - muutaAsteiksi(temp2));
 		//than turned into carthesian coordinates
 		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
+		if (increment == 999) {
+			cout << "ekat temp arvot: " << temp1 << " " << temp2;
+			cout << "\n karteesiset temp arvot: ";
+			cout << (mainVec[increment])[0] << " " << mainVec[increment][1] << " " << mainVec[increment][2] << "\n";
+			cout << "\n lopullinen kulma: ";
+			cout << acos(0.10070 * 0.935999 + 0.45075 * 0.0488027 + 0.88694 * 0.348602) << "\n"; //<-- RADIAANEINA, EI ASTEINA
+		}
 		increment++;
 	}
 	//printToFile(mainVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
@@ -113,10 +122,9 @@ float laskePistValKulma(vector<float> a, vector<float> b) {
 	return x;
 }
 
+//funktio joka saa arvon asteina ja palauttaa sitä vastaavan arvon radiaaneina
 float muutaRadiaaneiksi(float a) {
-	//cout << a << "\n";
-	//cout << a * (1 / 60) << " " << PI / 180;
-	return a * ((float)1 / (float)60) * (PI / (float)180);
+	return a * (PI / (float)180);
 }
 
 float muutaAsteiksi(float a) {
