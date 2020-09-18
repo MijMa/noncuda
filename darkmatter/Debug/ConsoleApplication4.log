@@ -1,0 +1,7 @@
+﻿  ConsoleApplication4.cpp
+C:\Users\illusive\source\repos\ConsoleApplication4\ConsoleApplication4\ConsoleApplication4.cpp(25,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\illusive\source\repos\ConsoleApplication4\ConsoleApplication4\ConsoleApplication4.cpp(25,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+C:\Users\illusive\source\repos\ConsoleApplication4\ConsoleApplication4\ConsoleApplication4.cpp(91,41): warning C4018: '>': signed/unsigned mismatch
+C:\Users\illusive\source\repos\ConsoleApplication4\ConsoleApplication4\ConsoleApplication4.cpp(166,8): warning C4101: 'ad': unreferenced local variable
+C:\Users\illusive\source\repos\ConsoleApplication4\ConsoleApplication4\ConsoleApplication4.cpp(167,7): warning C4101: 'bd': unreferenced local variable
+  ConsoleApplication4.vcxproj -> C:\Users\illusive\source\repos\ConsoleApplication4\Debug\ConsoleApplication4.exe
