@@ -1,0 +1,6 @@
+﻿  darkmatter.cpp
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(25,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(25,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(168,8): warning C4101: 'ad': unreferenced local variable
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(169,7): warning C4101: 'bd': unreferenced local variable
+  darkmatter.vcxproj -> C:\Users\illusive\source\repos\darkmatter\x64\Debug\darkmatter.exe
