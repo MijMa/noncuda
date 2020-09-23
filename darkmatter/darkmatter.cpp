@@ -16,14 +16,15 @@ Koodi ja kommentit suomeksi, koska vähitellen tajusin että se tekee omasta työsk
 #include <vector>
 using namespace std;
 
-vector<vector<float> > annaData();
+vector<vector<float> > annaData(string a);
 vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
-int laitaHistoGrammiin();
+vector<int> laitaHistoGrammiin(vector<vector<float> > a);
 float laskePistValKulma(vector<float> a, vector<float> b);
 float muutaRadiaaneiksi(float a);
 float muutaAsteiksi(float a);
 vector<float> muutaKarteesiseksi(float a, float b);
 void printToFile(vector<vector<float> > a);
+void printtaaVektori(vector<int> a);
 //int laskeGalaksit(int x);
 
 const int N = 16;
@@ -38,27 +39,30 @@ int main()
 	3. -> Tee histogrammi arvoista
 	4. -> CPU:lla laske tilastoarvo
 	*/
-
-	vector<vector<float> > dataVektori = annaData();
-	vector<vector<float> > kulmavektori = laskeKulmat(dataVektori, dataVektori);
-	printToFile(kulmavektori);
-	laitaHistoGrammiin(kulmavektori);
-	cout << dataVektori.size() << " [1][0] = " << dataVektori[1][0];
+	cout << 0.00436332313 * 720 << "\n";
+	vector<vector<float> > reaaliDataVektori = annaData("data_100k_arcmin.txt");
+	vector<vector<float> > randomDataVektori = annaData("flat_100k_arcmin.txt");
+	vector<vector<float> > kulmavektori = laskeKulmat(randomDataVektori, reaaliDataVektori);
+	vector<int> histogrammiVektori = laitaHistoGrammiin(kulmavektori);
+	//printToFile(kulmavektori);
+	cout << "\n Histogrammin koko:" << histogrammiVektori.size();
+	printtaaVektori(histogrammiVektori);
+	//cout << reaaliDataVektori.size() << " [1][0] = " << reaaliDataVektori[1][0];
 }
 
 //Apufunktio alkuperaisten arvojen lukemiseen tiedostosta ja preprosessointi karteesisiksi arvoiksi.
 //Palauttaa vektorin jossa on alivektoreissa karteesiset arvot (x, y, z).
-vector<vector<float> > annaData() {
-	ifstream myfile("data_100k_arcmin.txt", ios_base::in);
+vector<vector<float> > annaData(string filename) {
+	ifstream myfile(filename, ios_base::in);
 
-	const int size = 10;
+	const int size = 100;
 	int increment = 0;
 	//Two dimensional matrix for array values
-	vector<float> valueVec(10);
-	vector<vector<float> > mainVec(10, valueVec);
+	vector<float> valueVec(size);
+	vector<vector<float> > mainVec(size, valueVec);
 	string line;
 
-	while (getline(myfile, line) && increment < 10) {
+	while (getline(myfile, line) && increment < size) {
 		istringstream iss(line);
 		float temp1, temp2;
 
@@ -73,7 +77,7 @@ vector<vector<float> > annaData() {
 		temp2 = muutaRadiaaneiksi(90 - muutaAsteiksi(temp2));
 		//than turned into carthesian coordinates
 		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
-		if (increment == 9) {
+		if (increment == (size - 1)) {
 			cout << "ekat temp arvot: " << temp1 << " " << temp2;
 			cout << "\n karteesiset temp arvot: ";
 			cout << (mainVec[increment])[0] << " " << mainVec[increment][1] << " " << mainVec[increment][2] << "\n";
@@ -115,29 +119,24 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 	vector<int> histogrammiVektori;
 	//Treshold on tarkoitettu tämänhetkisen histogrammi-indeksin tarkastelua varten
 	float treshold = 0.00436332313;
-
+	float prevTreshold = 0;
+	
 	for (int i = 0; i < 720; i++) {
 		int j = 0;
 		for (vector<float> &a : arvot) {
 			for (float& b : a) {
-				if (b < treshold) {
+				if (b < treshold && b >= prevTreshold) { //annetaan toistaiseksi duplikaattien olla, tarkastetaan entrymäärä, sama nollille
 					j++;
 				}
 			}
+
 		}
 		histogrammiVektori.push_back(j);
 		//Siirrytään tarkastelemaan seuraavaa histogrammin alkiota
+		prevTreshold = treshold;
 		treshold = treshold + treshold;
 	}
-	//jokainen vektorin arvo pitäisi kertoa jokaisella toisella vektorin arvolla
-	/*
-	for (int i : arvot) {
-		for (int z : arvot) {
-		laskePistValKulma(i, z);
-		}
-	}
-	*/
-	return {0};
+	return histogrammiVektori;
 }
 
 //funktio kahden pisteen välisen kulman laskemiselle karteesisessa koordinaattijärjestelmässä.
@@ -178,6 +177,13 @@ void printToFile(vector<vector<float> > a) {
 				outFile << "\n";
 			}
 		}
+	}
+}
+
+void printtaaVektori(vector<int> a) {
+	cout << "Vektorin sisalto: \n";
+	for (int i = 0; i < a.size(); i++) {
+		cout << a[i] << ", ";
 	}
 }
 
