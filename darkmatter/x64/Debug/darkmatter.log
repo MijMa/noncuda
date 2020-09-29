@@ -1,7 +1,8 @@
 ﻿  darkmatter.cpp
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(32,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(32,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(121,32): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(197,8): warning C4101: 'ad': unreferenced local variable
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(198,7): warning C4101: 'bd': unreferenced local variable
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(33,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(33,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(119,32): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(142,12): warning C4305: 'return': truncation from 'double' to 'float'
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(200,8): warning C4101: 'ad': unreferenced local variable
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(201,7): warning C4101: 'bd': unreferenced local variable
   darkmatter.vcxproj -> C:\Users\illusive\source\repos\darkmatter\x64\Debug\darkmatter.exe

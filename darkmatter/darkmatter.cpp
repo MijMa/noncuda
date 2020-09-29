@@ -19,6 +19,7 @@ using namespace std;
 vector<vector<float> > annaData(string a);
 vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
 vector<int> laitaHistoGrammiin(vector<vector<float> > a);
+float laskeJakauma(vector<int>);
 float laskePistValKulma(vector<float> a, vector<float> b);
 float muutaRadiaaneiksi(float a);
 float muutaAsteiksi(float a);
@@ -35,8 +36,8 @@ int main()
 {
 	/*
 	1. -> Arvot arteesiseen koordinaattij‰rjestelm‰‰n
-	2. -> Laske kulmat jokaiselle parille
-	3. -> Tee histogrammi arvoista
+	2. -> Laske kulmat jokaiselle parille (GPU:lla)
+	3. -> Tee histogrammi arvoista (ehk‰ GPU:lla)
 	4. -> CPU:lla laske tilastoarvo
 	*/
 	cout << 0.00436332313 * 720 << "\n";
@@ -47,15 +48,14 @@ int main()
 	//printToFile(kulmavektori);
 	cout << "\n Histogrammin koko:" << histogrammiVektori.size();
 	printtaaVektori(histogrammiVektori);
-	//cout << reaaliDataVektori.size() << " [1][0] = " << reaaliDataVektori[1][0];
 }
 
 //Apufunktio alkuperaisten arvojen lukemiseen tiedostosta ja preprosessointi karteesisiksi arvoiksi.
-//Palauttaa vektorin jossa on alivektoreissa karteesiset arvot (x, y, z).
+//Palauttaa vektorin jossa on alivektoreissa karteesiset arvot (x, y, z) radiaaneina.
 vector<vector<float> > annaData(string filename) {
 	ifstream myfile(filename, ios_base::in);
 
-	const int size = 100;
+	const int size = 400;
 	int increment = 0;
 	//Two dimensional matrix for array values
 	vector<float> valueVec(size);
@@ -83,12 +83,9 @@ vector<vector<float> > annaData(string filename) {
 			cout << (mainVec[increment])[0] << " " << mainVec[increment][1] << " " << mainVec[increment][2] << "\n";
 			cout << "\n lopullinen kulma [0][0]: ";
 			cout << laskePistValKulma(mainVec[0], mainVec[0]) << "\n";
-			//cout << acos(0.10070 * 0.935999 + 0.45075 * 0.0488027 + 0.88694 * 0.348602) << "\n"; //<-- RADIAANEINA, EI ASTEINA
-			//SEURAAVAKSI laskeKulmat ja laitaHistogrammiin funktiot pit‰‰ toteuttaa ja testata
 		}
 		increment++;
 	}
-	//printToFile(mainVec); //  <-- NEGATIIVISIA ARVOJA, saattaa olla sopimaton.
 	cout << "Data transfer completed " << increment;
 	cout << " size of vector: " << mainVec.size() << " and the first value: " << mainVec[0].size();
 	return mainVec;
@@ -118,6 +115,7 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 	int sailiot = 720;
 	vector<int> histogrammiVektori;
 	//Treshold on tarkoitettu t‰m‰nhetkisen histogrammi-indeksin tarkastelua varten
+	// OVATKO TRESHLDIIN VERRATTAVAT ARVOT RADIAANEJA VAI ASTEITA?
 	float treshold = 0.00436332313;
 	float prevTreshold = 0;
 	
@@ -125,6 +123,7 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 		int j = 0;
 		for (vector<float> &a : arvot) {
 			for (float& b : a) {
+				//Vertailuoperaattorit heitt‰‰?
 				if (b < treshold && b >= prevTreshold) { //annetaan toistaiseksi duplikaattien olla, tarkastetaan entrym‰‰r‰, sama nollille
 					j++;
 				}
@@ -137,6 +136,11 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 		treshold = treshold + treshold;
 	}
 	return histogrammiVektori;
+}
+
+float laskeJakauma(vector<int>) {
+	
+	return 0.1;
 }
 
 //funktio kahden pisteen v‰lisen kulman laskemiselle karteesisessa koordinaattij‰rjestelm‰ss‰.
