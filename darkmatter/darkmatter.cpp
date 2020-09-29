@@ -115,16 +115,17 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 	int sailiot = 720;
 	vector<int> histogrammiVektori;
 	//Treshold on tarkoitettu t‰m‰nhetkisen histogrammi-indeksin tarkastelua varten
-	// OVATKO TRESHLDIIN VERRATTAVAT ARVOT RADIAANEJA VAI ASTEITA?
+	// OVATKO TRESHOLDIIN VERRATTAVAT ARVOT RADIAANEJA VAI ASTEITA?
 	float treshold = 0.00436332313;
+	float currentTreshold = 0.00436332313;
 	float prevTreshold = 0;
 	
 	for (int i = 0; i < 720; i++) {
 		int j = 0;
 		for (vector<float> &a : arvot) {
 			for (float& b : a) {
-				//Vertailuoperaattorit heitt‰‰?
-				if (b < treshold && b >= prevTreshold) { //annetaan toistaiseksi duplikaattien olla, tarkastetaan entrym‰‰r‰, sama nollille
+				
+				if (b < currentTreshold && b >= prevTreshold) { //annetaan toistaiseksi duplikaattien olla, tarkastetaan entrym‰‰r‰, sama nollille
 					j++;
 				}
 			}
@@ -132,8 +133,9 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 		}
 		histogrammiVektori.push_back(j);
 		//Siirryt‰‰n tarkastelemaan seuraavaa histogrammin alkiota
-		prevTreshold = treshold;
-		treshold = treshold + treshold;
+		prevTreshold = prevTreshold + treshold;
+		currentTreshold = currentTreshold + treshold;
+		cout << currentTreshold << " ";
 	}
 	return histogrammiVektori;
 }
