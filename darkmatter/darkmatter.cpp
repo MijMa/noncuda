@@ -115,7 +115,6 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 	int sailiot = 720;
 	vector<int> histogrammiVektori;
 	//Treshold on tarkoitettu tämänhetkisen histogrammi-indeksin tarkastelua varten
-	// OVATKO TRESHOLDIIN VERRATTAVAT ARVOT RADIAANEJA VAI ASTEITA?
 	float treshold = 0.00436332313;
 	float currentTreshold = 0.00436332313;
 	float prevTreshold = 0;
