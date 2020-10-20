@@ -19,7 +19,7 @@ using namespace std;
 vector<vector<float> > annaData(string a);
 vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
 vector<int> laitaHistoGrammiin(vector<vector<float> > a);
-float laskeJakauma(vector<int>);
+float laskeJakauma(vector<int> DD, DR, RR);
 float laskePistValKulma(vector<float> a, vector<float> b);
 float muutaRadiaaneiksi(float a);
 float muutaAsteiksi(float a);
@@ -43,9 +43,19 @@ int main()
 	cout << 0.00436332313 * 720 << "\n";
 	vector<vector<float> > reaaliDataVektori = annaData("data_100k_arcmin.txt");
 	vector<vector<float> > randomDataVektori = annaData("flat_100k_arcmin.txt");
-	vector<vector<float> > kulmavektori = laskeKulmat(randomDataVektori, reaaliDataVektori);
-	vector<int> histogrammiVektori = laitaHistoGrammiin(kulmavektori);
-	//printToFile(kulmavektori);
+    
+	vector<vector<float> > kulmavektoriDD = laskeKulmat(reaaliDataVektori, reaaliDataVektori);
+    vector<vector<float> > kulmavektoriDR = laskeKulmat(reaaliDataVektori, randomDataVektori);
+    vector<vector<float> > kulmavektoriRR = laskeKulmat(randomDataVektori, randomDataVektori);
+	
+    vector<int> histogrammiVektoriDD = laitaHistoGrammiin(kulmavektoriDD);
+    vector<int> histogrammiVektoriDR = laitaHistoGrammiin(kulmavektoriDR);
+    vector<int> histogrammiVektoriRR = laitaHistoGrammiin(kulmavektoriRR);
+    
+    //Lasketaan kahden kalaksijoukon arvojen distribuutio
+    vector<int> distribuutiot = laskeJakauma(histogrammiVektoriDD, histogrammiVektoriDR, histogrammiVektoriRR);
+    
+    //printToFile(kulmavektoriDD);
 	cout << "\n Histogrammin koko:" << histogrammiVektori.size();
 	printtaaVektori(histogrammiVektori);
 }
@@ -139,8 +149,12 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 	return histogrammiVektori;
 }
 
-float laskeJakauma(vector<int>) {
-	
+float laskeJakauma(vector<int> DD, DR, RR) {
+    
+    for (int i = 0; i < dd.length(); i++) {
+        (DD[i] - 2*DR[i] + RR[i])/(RR[i])
+    }
+    
 	return 0.1;
 }
 
