@@ -14,12 +14,13 @@ Koodi ja kommentit suomeksi, koska vähitellen tajusin että se tekee omasta työsk
 #include <sstream>
 #include <string>
 #include <vector>
+#include <numeric>
 using namespace std;
 
 vector<vector<float> > annaData(string a);
 vector<vector <float >> laskeKulmat(vector<vector <float >> a, vector<vector <float >> b);
 vector<int> laitaHistoGrammiin(vector<vector<float> > a);
-float laskeJakauma(vector<int> DD, DR, RR);
+vector<float> laskeJakauma(vector<int> DD, vector<int> DR, vector<int> RR);
 float laskePistValKulma(vector<float> a, vector<float> b);
 float muutaRadiaaneiksi(float a);
 float muutaAsteiksi(float a);
@@ -40,7 +41,6 @@ int main()
 	3. -> Tee histogrammi arvoista (ehkä GPU:lla)
 	4. -> CPU:lla laske tilastoarvo
 	*/
-	cout << 0.00436332313 * 720 << "\n";
 	vector<vector<float> > reaaliDataVektori = annaData("data_100k_arcmin.txt");
 	vector<vector<float> > randomDataVektori = annaData("flat_100k_arcmin.txt");
     
@@ -52,12 +52,17 @@ int main()
     vector<int> histogrammiVektoriDR = laitaHistoGrammiin(kulmavektoriDR);
     vector<int> histogrammiVektoriRR = laitaHistoGrammiin(kulmavektoriRR);
     
-    //Lasketaan kahden kalaksijoukon arvojen distribuutio
-    vector<int> distribuutiot = laskeJakauma(histogrammiVektoriDD, histogrammiVektoriDR, histogrammiVektoriRR);
+    //Lasketaan kahden galaksijoukon arvojen distribuutio
+    vector<float> distribuutiot = laskeJakauma(histogrammiVektoriDD, histogrammiVektoriDR, histogrammiVektoriRR);
     
     //printToFile(kulmavektoriDD);
-	cout << "\n Histogrammin koko:" << histogrammiVektori.size();
-	printtaaVektori(histogrammiVektori);
+	int kulmienMaara = (kulmavektoriDD[1].size() * kulmavektoriDD.size());
+	cout << "Histogrammin DD koko:" << histogrammiVektoriDD.size() << "\n";
+	cout << "Laskutoimituksia pitaisi olla 400 * 400 eli " << 400 * 400 << "\n";
+	cout << "Kulma-alkioita on: " << kulmienMaara << "\n";
+	cout << "Kulma-alkioita histogrammissa: " << accumulate(histogrammiVektoriDD.begin(), histogrammiVektoriDD.end(), 0) << "\n";
+	printVector(distribuutiot);
+
 }
 
 //Apufunktio alkuperaisten arvojen lukemiseen tiedostosta ja preprosessointi karteesisiksi arvoiksi.
@@ -78,30 +83,26 @@ vector<vector<float> > annaData(string filename) {
 
 		//Skip a line in the file if there's only one value in the line
 		if (!(iss >> temp1 >> temp2)) { continue; }
-		if (increment == 1) {
-			cout << "ekat temp arvot: " << temp1 << " " << temp2;
-		}
 		//right ascension in degrees turned into spherical coordinates
 		temp1 = muutaRadiaaneiksi(muutaAsteiksi(temp1));
 		//declination in degrees = 90 - declination for the angle in spherical
 		temp2 = muutaRadiaaneiksi(90 - muutaAsteiksi(temp2));
 		//than turned into carthesian coordinates
 		mainVec[increment] = muutaKarteesiseksi(temp1, temp2);
-		if (increment == (size - 1)) {
+		/*if (increment == (size - 1)) {
 			cout << "ekat temp arvot: " << temp1 << " " << temp2;
 			cout << "\n karteesiset temp arvot: ";
 			cout << (mainVec[increment])[0] << " " << mainVec[increment][1] << " " << mainVec[increment][2] << "\n";
 			cout << "\n lopullinen kulma [0][0]: ";
 			cout << laskePistValKulma(mainVec[0], mainVec[0]) << "\n";
-		}
+		}*/
 		increment++;
 	}
-	cout << "Data transfer completed " << increment;
-	cout << " size of vector: " << mainVec.size() << " and the first value: " << mainVec[0].size();
+	cout << "Data transfer completed " << increment << "\n";
 	return mainVec;
 }
 
-//Apufunktio joka laskee GPU:lla argumenttivektoriensa kaikkien pisteiden väliset kulmat
+//Apufunktio joka laskee GPU:lla argumenttivektoriensa kaikkien pisteiden väliset kulmat, laskenta-aika kasvaa parametrimäärän neliönä
 //Ottaa kaksi vektoria arvoja karteesisessa koordinaattijärjestelmässä
 //Palauttaa kaksitasoisen vektorin joka on täynnä kulma-arvoja
 vector<vector <float >> laskeKulmat (vector<vector <float >> karteesiArvot1, vector<vector <float >> karteesiArvot2) {
@@ -113,23 +114,23 @@ vector<vector <float >> laskeKulmat (vector<vector <float >> karteesiArvot1, vec
 			kulmaVektori[i].push_back(laskePistValKulma(a, karteesiArvot2[i]));
 		}
 	}
-	cout << "\n Kulmavektorin ekan alkion koko: " << kulmaVektori[1].size();
-	cout << "\n Kulmavektorin koko: " << kulmaVektori.size();
+	//cout << "\n Kulmavektorin ekan alkion koko: " << kulmaVektori[1].size();
+	//cout << "\n Kulmavektorin koko: " << kulmaVektori.size();
 	return kulmaVektori;
 }
 
 //Funktio joka saa parametrikseen kaksitasoisen vektorin ja jakaa sen arvot histogrammiin
 //Palauttaa vektorin täynnä int arvoja
 vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
-	// 1 sailio = 0.25 astetta. 180 asteen haitari siis 4*180
-	int sailiot = 720;
+	// 1 sailio = 0.25 astetta. 90 asteen haitari siis 4*90
+	int sailiot = 360;
 	vector<int> histogrammiVektori;
 	//Treshold on tarkoitettu tämänhetkisen histogrammi-indeksin tarkastelua varten
 	float treshold = 0.00436332313;
 	float currentTreshold = 0.00436332313;
 	float prevTreshold = 0;
 	
-	for (int i = 0; i < 720; i++) {
+	for (int i = 0; i < sailiot; i++) {
 		int j = 0;
 		for (vector<float> &a : arvot) {
 			for (float& b : a) {
@@ -144,18 +145,27 @@ vector<int> laitaHistoGrammiin(vector<vector<float> > arvot) {
 		//Siirrytään tarkastelemaan seuraavaa histogrammin alkiota
 		prevTreshold = prevTreshold + treshold;
 		currentTreshold = currentTreshold + treshold;
-		cout << currentTreshold << " ";
+		//cout << currentTreshold << " ";
 	}
 	return histogrammiVektori;
 }
 
-float laskeJakauma(vector<int> DD, DR, RR) {
-    
-    for (int i = 0; i < dd.length(); i++) {
-        (DD[i] - 2*DR[i] + RR[i])/(RR[i])
+//Saa parametreikseen kolme histogrammivektoria täynnä int arvoja
+//Palauttaa vektorina parametrivektoriensa jakauma-arvot väliltä -0.5-0.5
+//Arvot lähellä ykköstä todistaisivat että meille on annettu satunnainen joukko oikeita galakseja
+vector<float> laskeJakauma(vector<int> DD, vector<int> DR, vector<int> RR) {
+	vector<float> arvoVektori;
+	int hukkaArvot = 0;
+    for (int i = 0; i < DD.size(); i++) {
+		//if (RR[i] == 0) {
+		//	hukkaArvot++;
+		//	continue;
+		//}
+		float jakauma = (DD[i] - 2 * DR[i] + RR[i]) / (RR[i]);
+		arvoVektori.push_back(jakauma);
     }
-    
-	return 0.1;
+	//cout << "Hukattuja arvoja "<< hukkaArvot << "\n";
+	return arvoVektori;
 }
 
 //funktio kahden pisteen välisen kulman laskemiselle karteesisessa koordinaattijärjestelmässä.
@@ -206,6 +216,12 @@ void printtaaVektori(vector<int> a) {
 	}
 }
 
+//Geneerinen printtausfunktio
+template<typename T>
+void printVector(const T& t) {
+	std::copy(t.cbegin(), t.cend(), std::ostream_iterator<typename T::value_type>(std::cout, ", "));
+}
+
 //apufunktio kulmien ja vektorien laskemiseen, kutsuu GPU:n laskufunktiota
 int laskeGalaksit() {
 	//Hellossa tarpeeksi tilaa sanalle world!
@@ -248,4 +264,3 @@ int laskeGalaksit() {
 	*/
 	return 1;
 }
-
