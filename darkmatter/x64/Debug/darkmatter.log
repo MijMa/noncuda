@@ -1,11 +1,11 @@
 ﻿  darkmatter.cpp
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(34,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(34,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(59,71): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(64,2): error C3861: 'printVector': identifier not found
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(129,32): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(130,39): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(164,17): warning C4244: 'initializing': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(37,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(37,16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(62,71): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(67,2): error C3861: 'printVector': identifier not found
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(132,32): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(133,39): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\illusive\source\repos\darkmatter\darkmatter\darkmatter.cpp(167,17): warning C4244: 'initializing': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int

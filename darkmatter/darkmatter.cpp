@@ -15,6 +15,7 @@ Koodi ja kommentit suomeksi, koska vähitellen tajusin että se tekee omasta työsk
 #include <string>
 #include <vector>
 #include <numeric>
+
 using namespace std;
 
 vector<vector<float> > annaData(string a);
@@ -27,7 +28,11 @@ float muutaAsteiksi(float a);
 vector<float> muutaKarteesiseksi(float a, float b);
 void printToFile(vector<vector<float> > a);
 void printtaaVektori(vector<int> a);
+template<typename T>;
+void printVector(const T& t);
 //int laskeGalaksit(int x);
+
+
 
 const int N = 16;
 const int blocksize = 16;
@@ -209,19 +214,18 @@ void printToFile(vector<vector<float> > a) {
 	}
 }
 
+template<typename T>
+void printVector(const T& t) {
+	std::copy(t.cbegin(), t.cend(), std::ostream_iterator<typename T::value_type>(std::cout, ", "));
+}
+/*
 void printtaaVektori(vector<int> a) {
 	cout << "Vektorin sisalto: \n";
 	for (int i = 0; i < a.size(); i++) {
 		cout << a[i] << ", ";
 	}
 }
-
-//Geneerinen printtausfunktio
-template<typename T>
-void printVector(const T& t) {
-	std::copy(t.cbegin(), t.cend(), std::ostream_iterator<typename T::value_type>(std::cout, ", "));
-}
-
+*/
 //apufunktio kulmien ja vektorien laskemiseen, kutsuu GPU:n laskufunktiota
 int laskeGalaksit() {
 	//Hellossa tarpeeksi tilaa sanalle world!
