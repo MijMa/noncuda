@@ -9,6 +9,7 @@ Koodi ja kommentit suomeksi, koska vähitellen tajusin että se tekee omasta työsk
 //#include "device_launch_parameters.h"
 #include <stdio.h>
 #include "pch.h"
+#include "darkmatter.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -28,7 +29,7 @@ float muutaAsteiksi(float a);
 vector<float> muutaKarteesiseksi(float a, float b);
 void printToFile(vector<vector<float> > a);
 void printtaaVektori(vector<int> a);
-template<typename T>;
+template<typename T>
 void printVector(const T& t);
 //int laskeGalaksit(int x);
 
@@ -214,6 +215,7 @@ void printToFile(vector<vector<float> > a) {
 	}
 }
 
+// Geneerinen printtausmetodi vektoreille
 template<typename T>
 void printVector(const T& t) {
 	std::copy(t.cbegin(), t.cend(), std::ostream_iterator<typename T::value_type>(std::cout, ", "));
